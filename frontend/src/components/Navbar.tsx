@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Logo from "./logo";
 import { Button } from "./ui/button";
 
@@ -5,11 +6,16 @@ function Navbar() {
   return (
     <div className="border-b">
       <div className="container mx-auto flex items-center justify-between">
-        <Logo />
-
+        <Link to={"/"}>
+          <Logo />
+        </Link>
         <div className="flex gap-3">
-          <Button variant="outline">Login</Button>
-          <Button>Signup</Button>
+          <Link to={"/login"}>
+            <Button variant="outline">Login</Button>
+          </Link>
+          <Link to={"/signup"}>
+            <Button>Signup</Button>
+          </Link>
         </div>
       </div>
     </div>
