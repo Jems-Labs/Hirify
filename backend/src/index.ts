@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import userRoutes from "./routes/user";
 
 const app = new Hono();
 app.use(
@@ -15,7 +16,5 @@ app.use("*", (c, next) => {
   return next();
 });
 
-app.get("/", (c)=> {
-  return c.json({msg: "Thanks for choosing me"})
-})
+app.route("/api/user", userRoutes);
 export default app;
