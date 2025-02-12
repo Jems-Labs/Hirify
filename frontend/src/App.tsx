@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner"
 
 function App() {
   return (
