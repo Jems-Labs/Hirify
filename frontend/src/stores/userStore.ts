@@ -35,4 +35,33 @@ export const useUser = create<userStore>((set) => ({
       set({ user: null });
     }
   },
+  fetchUser: async () => {
+    try {
+      const res = await axios.get(`${BACKEND_URL}/api/user/fetch-user`, {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        set({ user: res.data });
+      }
+    } catch (error) {
+      set({ user: null });
+    }
+  },
+  logout: async () => {
+    try {
+      const res = await axios.post(
+        `${BACKEND_URL}/api/user/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      if (res.status === 200) {
+        set({ user: null });
+        toast.success("Logout Successful");
+      }
+    } catch (error) {
+      toast.error("Logout Failed");
+    }
+  },
 }));

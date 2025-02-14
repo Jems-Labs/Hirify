@@ -2,7 +2,11 @@ import { Context } from "hono";
 import { prismaClient } from "../utils/prismaClient";
 import { loginSchema, signupSchema } from "../zod/userSchemas";
 import { passwordHash, passwordCompare } from "../utils/passwordHash";
-import { generateTokenAndSetCookie } from "../utils/generateToken";
+import {
+  clearUserCookie,
+  generateTokenAndSetCookie,
+} from "../utils/generateToken";
+import { setCookie } from "hono/cookie";
 
 export async function handleUserSignup(c: Context) {
   const prisma = prismaClient(c); // Initialize Prisma client
@@ -34,7 +38,6 @@ export async function handleUserSignup(c: Context) {
     // Hash the password before storing it
     const hashedPassword = await passwordHash(password);
 
-    
     // Create a new user in the database
     const newUser = await prisma.user.create({
       data: {
@@ -43,7 +46,7 @@ export async function handleUserSignup(c: Context) {
         password: hashedPassword,
       },
     });
-    
+
     // If user creation fails, return an error
     if (!newUser) {
       return c.json({ msg: "Error in creating a user" }, 400);
@@ -61,7 +64,7 @@ export async function handleUserSignup(c: Context) {
       { status: 200 }
     );
   } catch (error) {
-    return c.json({ error: "Internal Server Error" }, 500);
+    return c.json({ msg: "Internal Server Error" }, 500);
   }
 }
 
@@ -110,6 +113,47 @@ export async function handleUserLogin(c: Context) {
       },
       { status: 200 }
     );
+  } catch (error) {
+    return c.json({ msg: "Internal Server Error" }, 500);
+  }
+}
+
+export async function handleUserLogout(c: Context) {
+  const { id } = c.get("user");
+  try {
+    if (!id) {
+      return c.json({ msg: "Unauthorized: No token provided" }, 401);
+    }
+    clearUserCookie(c);
+
+    return c.json({ msg: "Logout successful" }, 200);
+  } catch (error) {
+    return c.json({ msg: "Internal Server Error" }, 500);
+  }
+}
+
+export async function handleFetchUser(c: Context) {
+  const prisma = prismaClient(c);
+  const { id } = c.get("user");
+  try {
+    if (!id) {
+      return c.json({ msg: "Unauthorized: No token provided" }, 401);
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
+
+    if (!user) {
+      return c.json({ msg: "User not found" }, 404);
+    }
+    return c.json(user, 200);
   } catch (error) {
     return c.json({ error: "Internal Server Error" }, 500);
   }

@@ -1,9 +1,9 @@
 import { Context } from "hono";
 import { setCookie } from "hono/cookie";
 import { sign } from "hono/jwt";
+const isProduction = false;
 
 export const generateTokenAndSetCookie = async (payload: any, c: Context) => {
-  const isProduction = false;
 
   const jwt = await sign(
     {
@@ -19,3 +19,13 @@ export const generateTokenAndSetCookie = async (payload: any, c: Context) => {
     sameSite: isProduction ? "None" : "Lax",
   });
 };
+
+export const clearUserCookie = async (c: Context) => {
+  setCookie(c, "token", "", {
+    httpOnly: true,
+    secure: true,
+    maxAge: 0,
+    path: "/",
+    sameSite: isProduction ? "None" : "Lax",
+  });
+}

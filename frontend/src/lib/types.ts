@@ -15,4 +15,6 @@ export type userStore = {
 
   signup: (formData: Signup) => void;
   login: (formData: Login) => void;
+  fetchUser: () => void;
+  logout: () => void;
 };
