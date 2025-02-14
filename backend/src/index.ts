@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import userRoutes from "./routes/user";
+import interviewRoutes from "./routes/interview";
 
 const app = new Hono();
 app.use(
@@ -17,4 +18,7 @@ app.use("*", (c, next) => {
 });
 
 app.route("/api/user", userRoutes);
+app.route("/api/interview", interviewRoutes);
+
+
 export default app;

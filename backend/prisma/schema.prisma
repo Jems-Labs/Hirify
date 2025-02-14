@@ -15,8 +15,27 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String
-  password String
+  id         Int         @id @default(autoincrement())
+  name       String
+  email      String
+  password   String
+  interviews Interview[]
+}
+
+model Interview {
+  id             Int    @id @default(autoincrement())
+  title          String
+  description    String
+  roleOffered    String
+  candidateEmail String
+  interviewerId  Int
+  interviewer    User   @relation(fields: [interviewerId], references: [id])
+  date           String
+  status  Status @default(pending)
+}
+ 
+
+enum Status {
+  pending
+  accepted
 }

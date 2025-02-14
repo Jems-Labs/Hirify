@@ -10,6 +10,13 @@ export type User = {
   name: string;
   email: string;
 };
+export type ScheduleInterview = {
+  title: string;
+  description: string;
+  roleOffered: string;
+  candidateEmail: string;
+  date: string
+}
 export type userStore = {
   user: User | null;
 
@@ -17,4 +24,8 @@ export type userStore = {
   login: (formData: Login) => void;
   fetchUser: () => void;
   logout: () => void;
+};
+export type interviewStore = {
+  scheduleInterview: (formData: ScheduleInterview) => Promise<any>;
+  
 };
