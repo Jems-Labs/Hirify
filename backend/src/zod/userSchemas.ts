@@ -12,3 +12,12 @@ export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
+
+
+export const workExperienceSchema = z.object({
+  employer: z.string(),
+  role: z.string(),
+  fromDate: z.string(),
+  toDate: z.string(),
+  description: z.string()
+})

@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { useUser } from "./stores/userStore";
 import { useEffect } from "react";
 import ScheduleInterview from "./pages/ScheduleInterview";
+import Profile from "./pages/Profile";
 
 function App() {
   const { fetchUser } = useUser();
@@ -22,6 +23,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />}/>
         <Route path="/schedule-interview" element={<ScheduleInterview />}/>
       </Routes>
       <Toaster position="top-center" />

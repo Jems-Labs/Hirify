@@ -17,4 +17,27 @@ export const TIME_SLOTS = [
     "16:30",
     "17:00",
   ];
+  export const roles: string[] = [
+    "Designer",
+    "Frontend Developer",
+    "Backend Developer",
+    "Mobile Developer",
+    "Blockchain Developer",
+    "Other"
+  ];
   
+  export const skills: string[] = [
+    "Next.js",
+    "Node.js",
+    "Express.js",
+    "React.js",
+    "MongoDB",
+    "Rust",
+    "Go",
+    "Kotlin",
+    "Java",
+    "Javascript",
+    "Typescript",
+    "Python",
+    "Other"
+  ];
