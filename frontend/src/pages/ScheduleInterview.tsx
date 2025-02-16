@@ -28,32 +28,37 @@ import { TIME_SLOTS } from "@/lib/constants";
 import { ToUTCConversion } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { useInterview } from "@/stores/interviewStore";
+import { useLocation } from "react-router-dom";
 
 function ScheduleInterview() {
-  const [isLoading, setIsLoading] = useState(false)
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const candidateEmail = searchParams.get("email") || "";
+  const [isLoading, setIsLoading] = useState(false);
   const [date, setDate] = useState<Date | undefined>();
   const [time, setTime] = useState<string | undefined>();
-  const {scheduleInterview} = useInterview();
+  const { scheduleInterview } = useInterview();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     roleOffered: "",
-    candidateEmail: "",
-    date: ""
-  })
+    candidateEmail: candidateEmail || "",
+    date: "",
+  });
   useEffect(() => {
     if (date && time) {
       const utcDate = ToUTCConversion(date, time);
-     setFormData({...formData, date: utcDate})
+      setFormData({ ...formData, date: utcDate });
     }
   }, [date, time]);
 
-
   const handleScheduleInterview = async () => {
     setIsLoading(true);
-    const newInterview = await scheduleInterview(formData);
+    await scheduleInterview(formData);
     setIsLoading(false);
-  }
+  };
+
+  console.log(candidateEmail);
   return (
     <div className="w-full flex justify-center items-center my-10">
       <Card className="w-[500px]">
@@ -67,17 +72,34 @@ function ScheduleInterview() {
           <form className="grid grid-cols-1 gap-6">
             <div className="flex flex-col space-y-2">
               <Label htmlFor="title">Title</Label>
-              <Input id="title" placeholder="Enter interview title" onChange={(e)=>setFormData({...formData, title: e.target.value})}/>
+              <Input
+                id="title"
+                placeholder="Enter interview title"
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
+              />
             </div>
             <div className="flex flex-col space-y-2">
               <Label htmlFor="description">Description</Label>
-              <Textarea id="description" placeholder="Enter interview description" onChange={(e)=>setFormData({...formData, description: e.target.value})}/>
+              <Textarea
+                id="description"
+                placeholder="Enter interview description"
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+              />
             </div>
-
 
             <div className="flex flex-col space-y-2">
               <Label htmlFor="role">Role Offered</Label>
-              <Input id="role" placeholder="Enter role being offered" onChange={(e)=>setFormData({...formData, roleOffered: e.target.value})}/>
+              <Input
+                id="role"
+                placeholder="Enter role being offered"
+                onChange={(e) =>
+                  setFormData({ ...formData, roleOffered: e.target.value })
+                }
+              />
             </div>
             <div className="flex flex-col space-y-2">
               <Label htmlFor="candidate">Candidate</Label>
@@ -85,7 +107,10 @@ function ScheduleInterview() {
                 id="candidate"
                 placeholder="Enter candidate email"
                 type="email"
-                onChange={(e)=>setFormData({...formData, candidateEmail: e.target.value})}
+                value={formData.candidateEmail}
+                onChange={(e) =>
+                  setFormData({ ...formData, candidateEmail: e.target.value })
+                }
               />
             </div>
 
@@ -138,16 +163,19 @@ function ScheduleInterview() {
           <Button variant="outline" className="w-full">
             Cancel
           </Button>
-          <Button className={`w-full ${isLoading ? "disabled" : ""}`} onClick={handleScheduleInterview}>
-          {isLoading ? (
-            <span className="flex justify-center items-center">
-              <span className="animate-spin h-5 w-5 border-t-2 border-gray-500 border-solid rounded-full" />
-              <span className="ml-2">Loading...</span>
-            </span>
-          ) : (
-            "Schedule"
-          )}
-        </Button>
+          <Button
+            className={`w-full ${isLoading ? "disabled" : ""}`}
+            onClick={handleScheduleInterview}
+          >
+            {isLoading ? (
+              <span className="flex justify-center items-center">
+                <span className="animate-spin h-5 w-5 border-t-2 border-gray-500 border-solid rounded-full" />
+                <span className="ml-2">Loading...</span>
+              </span>
+            ) : (
+              "Schedule"
+            )}
+          </Button>
         </CardFooter>
       </Card>
     </div>

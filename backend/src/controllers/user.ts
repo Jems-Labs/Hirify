@@ -101,7 +101,7 @@ export async function handleUserLogin(c: Context) {
     }
 
     // Verify the password
-    const isPasswordValid = passwordCompare(password, user.password);
+    const isPasswordValid = await passwordCompare(password, user.password);
     if (!isPasswordValid) {
       return c.json({ msg: "Invalid credentials" }, 401);
     }
@@ -286,6 +286,43 @@ export async function handleDeleteWorkExperience(c: Context) {
       where: { id },
     });
     return c.json({ msg: "Work experience deleted successfully" }, 200);
+  } catch (error) {
+    return c.json({ error: "Internal Server Error" }, 500);
+  }
+}
+
+export async function handleFindCandidates(c: Context) {
+  const prisma = prismaClient(c);
+  const data = await c.req.json();
+  const { id } = c.get("user"); 
+
+  try {
+    const { roles = [], skills = [], query } = data;
+
+    const candidates = await prisma.user.findMany({
+      where: {
+        AND: [
+          { id: { not: id } },
+          query
+            ? {
+                OR: [
+                  { name: { contains: query, mode: "insensitive" } },
+                  { roles: { hasSome: [query] } },
+                  { skills: { hasSome: [query] } },
+                ],
+              }
+            : {},
+          roles.length > 0 ? { roles: { hasSome: roles } } : {},
+          skills.length > 0 ? { skills: { hasSome: skills } } : {},
+        ],
+      },
+    });
+
+    if (candidates.length === 0) {
+      return c.json({ msg: "No Candidate found" }, 404);
+    }
+    
+    return c.json(candidates, 200);
   } catch (error) {
     return c.json({ error: "Internal Server Error" }, 500);
   }

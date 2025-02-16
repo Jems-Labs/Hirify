@@ -9,6 +9,7 @@ import { useUser } from "./stores/userStore";
 import { useEffect } from "react";
 import ScheduleInterview from "./pages/ScheduleInterview";
 import Profile from "./pages/Profile";
+import HiringCandidates from "./pages/HiringCandidates";
 
 function App() {
   const { fetchUser } = useUser();
@@ -25,6 +26,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />}/>
         <Route path="/schedule-interview" element={<ScheduleInterview />}/>
+        <Route path="/hiring/candidates" element={<HiringCandidates />}/>
       </Routes>
       <Toaster position="top-center" />
     </div>

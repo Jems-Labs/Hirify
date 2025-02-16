@@ -31,10 +31,12 @@ function Navbar() {
         <div className="flex gap-3">
           {user ? (
             <div className="flex gap-3">
-              <Button>
-                <Briefcase className="h-5 w-5" />
-                Start Hiring
-              </Button>
+              <Link to={"/hiring/candidates"}>
+                <Button>
+                  <Briefcase className="h-5 w-5" />
+                  Start Hiring
+                </Button>
+              </Link>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button

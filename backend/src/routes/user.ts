@@ -3,6 +3,7 @@ import {
   handleAddWorkExperience,
   handleDeleteWorkExperience,
   handleFetchUser,
+  handleFindCandidates,
   handleProfileUpdate,
   handleSkillsUpdate,
   handleUpdateWorkExperience,
@@ -22,5 +23,7 @@ userRoutes.put("/profile-update", protectRoute, handleProfileUpdate);
 userRoutes.put("/skills-update", protectRoute, handleSkillsUpdate);
 userRoutes.post("/add-work-experience", protectRoute, handleAddWorkExperience);
 userRoutes.put("/update-work-experience/:id", protectRoute, handleUpdateWorkExperience);
-userRoutes.delete("/delete-work-experience/:id", protectRoute, handleDeleteWorkExperience)
+userRoutes.delete("/delete-work-experience/:id", protectRoute, handleDeleteWorkExperience);
+userRoutes.post("/find-candidates", protectRoute, handleFindCandidates);
+
 export default userRoutes;
